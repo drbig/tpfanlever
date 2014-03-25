@@ -1,0 +1,19 @@
+# Simplest ThinkPad Fan Throttler
+
+I've been fed up with the fact that on my X220, once the fan goes above 3k RPM, it never slows down... even if the reported temperature drops below 40°C (which is roughly the point at which the fan will _only_ _engage_ after boot...). Contrary to other [currently](https://wiki.archlinux.org/index.php/Thinkpad_Fan_Control) available solutions, this one is arguably the simplest.
+
+Configuration is done via defines, hopefully clear enough:
+
+```
+#define SENSOR    "/sys/class/thermal/thermal_zone0/temp" // where to read temperature from
+#define FAN       "/proc/acpi/ibm/fan" // where to write control strings
+#define LEVEL_LOW "level 1"     // the 'low level' control string
+#define LEVEL_HI  "level auto"  // the 'high level' control string
+#define THRESHOLD 47000 // threshold between low and high (unit as returned by SENSOR)
+#define GRACE     16    // how many consecutive below threshold readouts before moving to high
+#define DELAY     2     // pause between sensor reads, in seconds
+```
+
+I recommend to first ```make debug``` version and see if everything is as expected. Tweak the above as needed and when satisfied ```make all``` to get a silent version.
+
+This software comes with **absolutely no warranty**, if you need legalese assume [BSD 2-clause license](http://opensource.org/licenses/BSD-2-Clause). 
